@@ -9,17 +9,18 @@ handler = logging.StreamHandler()
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
-def create_power_data():
+def create_power_random_data():
     return {
         "timestamp": pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "l1": random.randint(200, 245),
-        "l2": random.randint(200, 245),
-        "l3": random.randint(200, 245),
+        "l1": random.randint(230, 245),
+        "l2": random.randint(230, 245),
+        "l3": random.randint(230, 245),
     }
     
 def kafka_producer_power(
-    kafka_topic: str = "powerData",
+    kafka_topic: str = "power.power_data",
     kafka_brokers: str = "localhost:9093",
+    request_dict: dict = create_power_random_data(),
 ):
     p = Producer(
         {
@@ -30,8 +31,6 @@ def kafka_producer_power(
             "socket.keepalive.enable": True,
         }
     )
-
-    request_dict = create_power_data()
     
     p.produce(kafka_topic, str(request_dict))
     p.poll(1)
@@ -40,7 +39,7 @@ def kafka_producer_power(
     return request_dict
 
 def kafka_consumer_power(
-    kafka_topic: str = "powerData",
+    kafka_topic: str = "power.power_data",
     kafka_brokers: str = "localhost:9093",
 ):
     from confluent_kafka import Consumer

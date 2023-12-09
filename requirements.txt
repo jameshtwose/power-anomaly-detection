@@ -1,5 +1,6 @@
 pandas
 sqlalchemy
+sqlalchemy-trino
 psycopg2-binary
 confluent-kafka
 streamlit
