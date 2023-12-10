@@ -20,6 +20,7 @@ class AnomaliesTable(Base):
     l3 = Column(Float)
     timestamp = Column(DateTime, primary_key=True)
     hard_cutoff_prediction = Column(Boolean)
+    gaussian_scorer_prediction = Column(Boolean)
     
     def __repr__(self):
         return f"<AnomaliesTable(name={self.name}, value={self.value})>"

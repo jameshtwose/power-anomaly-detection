@@ -1,5 +1,9 @@
 import pandas as pd
 import random
+import pickle
+
+with open('GaussianScorer_model.pkl', 'rb') as f:
+    gaussian_scorer_detector = pickle.load(f)
 
 def create_simple_anomaly(anomaly_number: int = 210):
     new_request_dict = {
@@ -24,3 +28,18 @@ def hard_cutoff_anomaly_detector(
         return True
     else:
         return False
+    
+def gaussian_scorer_anomaly_detector(
+    row: pd.Series,
+    detector = gaussian_scorer_detector,
+    cutoff_percentile: float = 0.9
+    ):
+    if detector.score_one(None, row["l1"]) >= cutoff_percentile:
+        return True
+    elif detector.score_one(None, row["l2"]) >= cutoff_percentile:
+        return True
+    elif detector.score_one(None, row["l3"]) >= cutoff_percentile:
+        return True
+    else:
+        return False
+    
