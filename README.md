@@ -12,3 +12,7 @@ This is a mock anomaly detection project. Mock data is streamed using Kafka to T
 
 ## Run
 - `streamlit run dashboard.py`
+
+## Extras
+- check what ports are in use: `sudo lsof -i -P -n | grep LISTEN`
+- kill a process: `sudo kill -9 <PID>`

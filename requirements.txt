@@ -6,3 +6,6 @@ confluent-kafka
 streamlit
 plotly
 seaborn
+torch
+torchvision
+scikit-learn

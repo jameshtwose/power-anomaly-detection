@@ -1,6 +1,6 @@
 # %%
 from sqlalchemy import create_engine, text
-from models import ExampleTable
+from models import ExampleTable, AnomaliesTable
 import pandas as pd
 
 # %%
@@ -17,6 +17,11 @@ with engine.connect() as conn:
 # create the example table
 try:
     ExampleTable.__table__.create(engine)
+except Exception as e:
+    print(e)
+    
+try:
+    AnomaliesTable.__table__.create(engine)
 except Exception as e:
     print(e)
 # %%
@@ -43,4 +48,7 @@ with engine.connect() as conn:
     )
 # %%
 df
+# %%
+# drop anomaly table
+AnomaliesTable.__table__.drop(engine)
 # %%
