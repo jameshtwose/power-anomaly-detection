@@ -41,9 +41,13 @@ while True:
     df = pre_df["_message"].apply(literal_eval).apply(pd.Series)
 
     df_melt = df.melt(
-        id_vars=["timestamp"], value_vars=["l1", "l2", "l3"], var_name="measurement"
+        id_vars=["timestamp"],
+        value_vars=["l1", "l2", "l3"],
+        var_name="measurement",
     )
-    fig = px.line(df_melt, x="timestamp", y="value", color="measurement", markers=True)
+    fig = px.line(
+        df_melt, x="timestamp", y="value", color="measurement", markers=True
+    )
     pl1.plotly_chart(fig)
 
     with engine.connect() as conn:

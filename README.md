@@ -9,6 +9,8 @@ This is a mock anomaly detection project. Mock data is streamed using Kafka to T
 - `kafka-topics.sh --create --topic power.power_data --bootstrap-server localhost:9093`
 - (Optional) `kafka-console-consumer.sh --topic power.power_data --from-beginning --bootstrap-server localhost:9093` - check if data is in the topic
 - `exit` - exit the kafka container
+- create the necessary tables in postgres
+    - `python connection_sandbox_postgres.py`
 
 ## Run
 - `streamlit run dashboard.py`

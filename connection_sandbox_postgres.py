@@ -50,5 +50,5 @@ with engine.connect() as conn:
 df
 # %%
 # drop anomaly table
-AnomaliesTable.__table__.drop(engine)
+# AnomaliesTable.__table__.drop(engine)
 # %%
