@@ -55,28 +55,61 @@ while True:
         )
     pl2.write(anom_df)
 
-    latest_row = df.iloc[-1, :]
+    latest_rows = df.tail(10)
+    
+    # per latest rows check if there is an anomaly and if so, add it to the database,
+    # do not add if it is already in the database
+    for _, latest_row in latest_rows.iterrows():
+        hard_cutoff_prediction = hard_cutoff_anomaly_detector(latest_row)
+        gaussian_scorer_prediction = gaussian_scorer_anomaly_detector(latest_row)
+        
+        if any([hard_cutoff_prediction, gaussian_scorer_prediction]):
+            with engine.connect() as conn:
+                check_df = pd.read_sql(
+                    text(
+                        "select * from postgres.public.anomalies_table where timestamp > current_timestamp - interval '10' minute"
+                    ),
+                    conn,
+                )
+            if latest_row["timestamp"] not in check_df["timestamp"].values:
+                conn.execute(
+                    text(
+                        "insert into postgres.public.anomalies_table values (:l1, :l2, :l3, :timestamp, :hard_cutoff_prediction, :gaussian_scorer_prediction)"
+                    ),
+                    {
+                        "l1": latest_row["l1"],
+                        "l2": latest_row["l2"],
+                        "l3": latest_row["l3"],
+                        "timestamp": pd.to_datetime(latest_row["timestamp"]),
+                        "hard_cutoff_prediction": hard_cutoff_prediction,
+                        "gaussian_scorer_prediction": gaussian_scorer_prediction,
+                    },
+                )
+                conn.commit()
 
-    hard_cutoff_prediction = hard_cutoff_anomaly_detector(latest_row)
-    gaussian_scorer_prediction = gaussian_scorer_anomaly_detector(latest_row)
     
-    gaussian_scorer_prediction = False
+    # latest_row = df.iloc[-1, :]
+
+    # hard_cutoff_prediction = hard_cutoff_anomaly_detector(latest_row)
+    # gaussian_scorer_prediction = gaussian_scorer_anomaly_detector(latest_row)
     
-    if any([hard_cutoff_prediction, gaussian_scorer_prediction]):
-        with engine.connect() as conn:
-            conn.execute(
-                text(
-                    "insert into postgres.public.anomalies_table values (:l1, :l2, :l3, :timestamp, :hard_cutoff_prediction, :gaussian_scorer_prediction)"
-                ),
-                {
-                    "l1": latest_row["l1"],
-                    "l2": latest_row["l2"],
-                    "l3": latest_row["l3"],
-                    "timestamp": pd.to_datetime(latest_row["timestamp"]),
-                    "hard_cutoff_prediction": hard_cutoff_prediction,
-                    "gaussian_scorer_prediction": gaussian_scorer_prediction,
-                },
-            )
-            conn.commit()
+    # gaussian_scorer_prediction = False
+    
+    # if any([hard_cutoff_prediction, gaussian_scorer_prediction]):
+    #     with engine.connect() as conn:
+    #         conn.execute(
+    #             text(
+    #                 "insert into postgres.public.anomalies_table values (:l1, :l2, :l3, :timestamp, :hard_cutoff_prediction, :gaussian_scorer_prediction)"
+    #             ),
+    #             {
+    #                 "l1": latest_row["l1"],
+    #                 "l2": latest_row["l2"],
+    #                 "l3": latest_row["l3"],
+    #                 "timestamp": pd.to_datetime(latest_row["timestamp"]),
+    #                 "hard_cutoff_prediction": hard_cutoff_prediction,
+    #                 "gaussian_scorer_prediction": gaussian_scorer_prediction,
+    #             },
+    #         )
+    #         conn.commit()
 
     time.sleep(5)

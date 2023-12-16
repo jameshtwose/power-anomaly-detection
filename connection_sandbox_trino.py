@@ -72,5 +72,13 @@ df_melt = df.melt(
 # %%
 df_melt
 # %%
-
+with engine.connect() as conn:
+    # create a new table in the localfile schema
+    result = conn.execute(
+        text(
+            "SHOW TABLES FROM localfile.logs"
+        )
+    )
+    print(result.all())
+    conn.commit()
 # %%
