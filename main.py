@@ -3,19 +3,19 @@ from multiprocessing import Process
 import time
 import pandas as pd
 import random
-import joblib
-import pandas as pd
 from glob import glob
+import sys
+from streamlit.web import cli as stcli
+
+
+def run_dashboard():
+    sys.argv = ["streamlit", "run", "dashboard.py"]
+    sys.exit(stcli.main())
 
 
 def run_kafka_producer_power():
-    # model = joblib.load("ar_random_forest.joblib")
-
     glob_choice = random.choice([0, 1, 2])
-
     df = pd.read_csv(glob("example_data/*.csv")[glob_choice])
-
-    # y_pred = model.predict(df.loc[:, ["l1", "l2", "l3"]])
     row_count = 0
     while True:
         new_request_dict = {
@@ -29,13 +29,12 @@ def run_kafka_producer_power():
         if row_count == df.shape[0]:
             glob_choice = random.choice([0, 1, 2])
             df = pd.read_csv(glob("example_data/*.csv")[glob_choice])
-            # y_pred = model.predict(df.loc[:, ["l1", "l2", "l3"]])
             row_count = 0
-        time.sleep(5)
+        time.sleep(10)
 
 
 if __name__ == "__main__":
     p1 = Process(target=run_kafka_producer_power)
     p1.start()
-    # p2 = Process(target=kafka_consumer_power)
-    # p2.start()
+    p2 = Process(target=run_dashboard)
+    p2.start()
