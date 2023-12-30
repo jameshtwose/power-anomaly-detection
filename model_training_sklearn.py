@@ -78,9 +78,9 @@ _ = sns.lineplot(
     hue="measurement",
 )
 # %%
-joblib.dump(model, "ar_random_forest.joblib")
+joblib.dump(model, "ml_models/ar_random_forest.joblib")
 # %%
-model = joblib.load("ar_random_forest.joblib")
+model = joblib.load("ml_models/ar_random_forest.joblib")
 # %%
 model.predict(pd.DataFrame([[230, 230, 230]], columns=["l1", "l2", "l3"]))
 # %%

@@ -30,7 +30,7 @@ def run_kafka_producer_power():
             glob_choice = random.choice([0, 1, 2])
             df = pd.read_csv(glob("example_data/*.csv")[glob_choice])
             row_count = 0
-        time.sleep(10)
+        time.sleep(5)
 
 
 if __name__ == "__main__":

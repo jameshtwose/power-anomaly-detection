@@ -1,5 +1,16 @@
 # power-anomaly-detection
-This is a mock anomaly detection project. Mock data is streamed using Kafka to Trino, a trained model attempts to identify anomalies and the predicted anomalies are inserted into a mysql table. A streamlit frontend is there to see the continuous time series data and to insert anomalies to test the detection algorithm
+This is an anomaly detection project using mock power data (voltage time series).
+- mock data was created using a random forest regressor with a lag of 1 trained on real power data from smart meters 
+- this mock data is streamed using Kafka to Trino
+- trained models attempt to identify anomalies based on this batched Trino data
+- and the predicted anomalies are inserted into a postgresql table 
+- a streamlit frontend is included to see the continuous time series data and,
+- to insert anomalies to test the detection algorithms.
+
+For a more in depth explanation see the following [blog post]().
+
+## Pipeline
+![Pipeline](power-anomaly-detection-pipeline.png)
 
 ## Setup
 - `pip install -r requirements.txt`
@@ -13,7 +24,7 @@ This is a mock anomaly detection project. Mock data is streamed using Kafka to T
     - `python connection_sandbox_postgres.py`
 
 ## Run
-- `streamlit run dashboard.py`
+- `python main.py`
 
 ## Extras
 - check what ports are in use: `sudo lsof -i -P -n | grep LISTEN`
