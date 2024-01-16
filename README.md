@@ -7,7 +7,7 @@ This is an anomaly detection project using mock power data (voltage time series)
 - a streamlit frontend is included to see the continuous time series data and,
 - to insert anomalies to test the detection algorithms.
 
-For a more in depth explanation see the following [blog post]().
+For a more in depth explanation see the following [blog post](https://www.cinqict.nl/blog/realtime-anomaly-detection-with-trino).
 
 ## Pipeline
 ![Pipeline](power-anomaly-detection-pipeline.png)
